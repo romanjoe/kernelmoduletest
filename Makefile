@@ -6,7 +6,7 @@ TARGET2 = md2
 TARGET3 = md3
 TARGET4 = log_level
 
-obj-m	:= $(TARGET1).o $(TARGET2).o $(TARGET3).o $(TARGET4).o
+obj-m	:=  $(TARGET1).o $(TARGET2).o $(TARGET3).o $(TARGET4).o
 
 default:
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
