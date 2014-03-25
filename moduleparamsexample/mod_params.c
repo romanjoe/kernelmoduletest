@@ -26,6 +26,7 @@ static int __init mod_init( void )
 {
 	int j;
 	char msg[ 40 ] = "";
+	
 	printk( "========================================\n" ); 
 	printk( "iparam = %d\n", iparam ); 
    	printk( "nparam = %d\n", k ); 
