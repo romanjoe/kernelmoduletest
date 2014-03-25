@@ -5,7 +5,7 @@
 #include <linux/kdev_t.h>
 #include <sys/syscall.h>
 
-int write_call(int fd, const char* str, int len)
+int write_call( int fd, const char* str, int len )
 {
 	long __res;
 	
@@ -16,21 +16,21 @@ int write_call(int fd, const char* str, int len)
 	return (int) __res;
 }
 
-void do_write(void)
+void do_write( void )
 {
 	char* str = "Ethalone string for print!\n";
 	int len = strlen(str) +1, n;
 
-	printf("String for write length = %d\n", len);
+	printf( "String for write length = %d\n", len );
 	n = write_call(1, str, len);
-	printf("write return %d\n", n);
+	printf( "write return %d\n", n );
 }
 
-int mknod_call(const char *pathname, mode_t mode, dev_t dev)
+int mknod_call( const char *pathname, mode_t mode, dev_t dev )
 {
 	long __res;
 
-	__asm__ volatile ("int $0x80":
+	__asm__ volatile ( "int $0x80":
 		"=a" (__res):
 		"a"(__NR_mknod),"b"((long)(pathname)),"c"((long)(mode)),"d"((long)(dev))
 	);
@@ -38,7 +38,7 @@ int mknod_call(const char *pathname, mode_t mode, dev_t dev)
 	return (int) __res;
 }
 
-void do_mknod(void)
+void do_mknod( void )
 {
 	char* nam = "ZZZ";
 	int n = mknod_call( nam, S_IFCHR | S_IRUSR | S_IWUSR, MKDEV(247, 0) );
@@ -46,7 +46,7 @@ void do_mknod(void)
 	printf("mknod return: %d\n", n);
 }
 
-int getpid_call(void)
+int getpid_call( void )
 {
 	long __res;
 
@@ -55,14 +55,14 @@ int getpid_call(void)
 	return (int) __res;
 }
 
-void do_getpid(void)
+void do_getpid( void )
 {
 	int n = getpid_call();
 
-	printf("get pid id return: %d\n", n);
+	printf( "get pid id return: %d\n", n );
 }
 
-int main(int argc, char const *argv[])
+int main( int argc, char const *argv[] )
 {
 	do_getpid();
 	do_write();
