@@ -1,5 +1,5 @@
 #include <linux/cdev.h>
-#include "../dev.h"
+#include "dev.h"
 
 static int major = 0;
 module_param( major, int, S_IRUGO );
@@ -55,7 +55,7 @@ static int __init dev_init( void )
 	}
 
 	cdev_init( &hcdev, &dev_fops );
-	hdev.owner = THIS_MODULE;
+	hcdev.owner = THIS_MODULE;
 	ret = cdev_add( &hcdev, dev, DEVICE_COUNT );
 
 	if ( ret < 0 ){
@@ -63,8 +63,8 @@ static int __init dev_init( void )
 		printk( KERN_ERR "=== Can not add char device\n" );
 		goto err;
 	}
-	printk( KERN_INFO "========= modu instantiated %d:%d ==========\n",
-			MAJOR( dev ), MINOR( dev ) );
+	printk( KERN_INFO "========= module instantiated %d:%d ==========\n",
+			(int) MAJOR( dev ), (int) MINOR( dev ) );
 err:
 	return ret;
 }
@@ -73,5 +73,5 @@ static void __exit dev_exit( void )
 {
 	cdev_del( &hcdev );
 	unregister_chrdev_region( MKDEV( major, DEVICE_FIRST ), DEVICE_COUNT );
-	printk( KERN_INFO "========= modu removed %d:%d ==========\n" ) 
+	printk( KERN_INFO "========= module removed  ==========\n" );
 }
