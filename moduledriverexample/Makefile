@@ -5,8 +5,8 @@ DEST = /lib/modules/$(CURRENT)/misc
 MAJOR = 201
 
 TARGET1 = fixdev
-#TARGET2 = dyndev
-obj-m   := $(TARGET1).o
+TARGET2 = dyndev
+obj-m   := $(TARGET1).o $(TARGET2).o
 
 all: default clean
 
