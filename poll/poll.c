@@ -14,11 +14,11 @@ static struct private				// device data block
 } 
 devblock =							// static initialization of what 
 {									// will dynamically happen in open()
-	.roff = ATOMIC_INIT( 0 );
-	.buf = "not initiazed yet!\n";
+	.roff = ATOMIC_INIT( 0 ),
+	.buf = "not initiazed yet!\n",
 };
 
-static struct private *dev = $devblock;
+static struct private *dev = &devblock;
 
 static DECLARE_WAIT_QUEUE_HEAD( qwait ); // wait queue
 
@@ -29,16 +29,16 @@ static ssize_t read( struct file *file, char *buf,
 	int len = 0;
 	int off = atomic_read( &dev->roff );
 
-	if ( off > strlen( &dev->buf ) )	// no available data
+	if( off > strlen( &dev->buf ) )	// no available data
 	{
 		if( file->f_flags & O_NONBLOCK )
 			return -EAGAIN;
-		else interruplible_sleep_on( &qwait );
+		else interruptible_sleep_on( &qwait );
 	}
 
 	off = atomic_read( &dev->roff );	// read update
 
-	if ( roff == strlen( dev->buf ) )
+	if( off == strlen( dev->buf ) )
 	{
 		atomic_set( &dev->roff, off + 1 );
 		return 0;
@@ -66,7 +66,7 @@ static ssize_t write( struct file *file, const char *buf,
 		strcat( dev->buf, "\n" );
 
 	atomic_set( &dev->roff, 0 );		// enable next reading
-	wake_up_interruplible( &qwait );
+	wake_up_interruptible( &qwait );
 
 	return len;
 }
