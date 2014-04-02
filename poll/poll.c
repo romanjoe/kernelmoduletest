@@ -7,14 +7,11 @@ MODULE_VERSION( "5.2" );
 static int pause = 100;
 module_param( pause, int, S_IRUGO );
 
-static struct private				// device data block			
-{
+static struct private {				// device data block			
 	atomic_t roff;					// offset for read
-	char buf[ LEN_MSG +2 ];			// data buffer
-} 
-devblock =							// static initialization of what 
-{									// will dynamically happen in open()
-	.roff = ATOMIC_INIT( 0 ),
+	char buf[ LEN_MSG + 2 ];		// data buffer
+} devblock = {						// static initialization of what 
+	.roff = ATOMIC_INIT( 0 ),		// will dynamically happen in open()
 	.buf = "not initiazed yet!\n",
 };
 
@@ -29,7 +26,7 @@ static ssize_t read( struct file *file, char *buf,
 	int len = 0;
 	int off = atomic_read( &dev->roff );
 
-	if( off > strlen( &dev->buf ) )	// no available data
+	if( off > strlen( dev->buf ) )	// no available data
 	{
 		if( file->f_flags & O_NONBLOCK )
 			return -EAGAIN;
@@ -72,7 +69,7 @@ static ssize_t write( struct file *file, const char *buf,
 }
 
 // multiplexing poll/select (with dummy delay)
-unsigned int poll( struct file *flie, struct poll_table_struct *poll )
+unsigned int poll( struct file *file, struct poll_table_struct *poll )
 {
 	int flag = POLLOUT | POLLWRNORM;
 	poll_wait( file, &qwait, poll );
@@ -100,19 +97,19 @@ static struct miscdevice pool_dev =
 };
 
 static int __init init( void )
-{ 
-   int ret = misc_register( &pool_dev ); 
+{
+	int ret = misc_register( &pool_dev ); 
 
-   if( ret ) printk( KERN_ERR "unable to register device\n" ); 
+	if( ret ) printk( KERN_ERR "unable to register device\n" ); 
 
-   return ret; 
-} 
+	return ret; 
+}
 
 module_init( init ); 
 
 static void __exit exit( void )
-{ 
-   misc_deregister( &pool_dev ); 
-} 
+{
+	misc_deregister( &pool_dev ); 
+}
 
 module_exit( exit );
