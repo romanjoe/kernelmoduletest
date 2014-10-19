@@ -1,0 +1,569 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"w",
+				"word"
+			],
+			[
+				"wor",
+				"words"
+			],
+			[
+				"Ali",
+				"Alice's"
+			],
+			[
+				"inpu",
+				"input_file"
+			],
+			[
+				"prin",
+				"print"
+			],
+			[
+				"in",
+				"input_file"
+			],
+			[
+				"struc",
+				"structure"
+			],
+			[
+				"de",
+				"dev"
+			],
+			[
+				"print",
+				"printf	printf …"
+			],
+			[
+				"do_",
+				"do_mknod"
+			],
+			[
+				"get",
+				"do_getpid"
+			],
+			[
+				"__",
+				"__NR_mknod"
+			],
+			[
+				"mode",
+				"mode_t"
+			],
+			[
+				"pr",
+				"printf	printf …"
+			],
+			[
+				"writ",
+				"write_call"
+			],
+			[
+				"pri",
+				"printf	printf …"
+			],
+			[
+				"st",
+				"str"
+			],
+			[
+				"md1",
+				"md1_intvalue"
+			],
+			[
+				"md",
+				"md1_proc"
+			],
+			[
+				"TARGET",
+				"TARGET4"
+			],
+			[
+				"TAR",
+				"TARGET3"
+			],
+			[
+				"TA",
+				"TARGET2"
+			],
+			[
+				"s",
+				"static"
+			],
+			[
+				"inc",
+				"include"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "mdc.c",
+			"settings":
+			{
+				"buffer_size": 245,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "mdu.c",
+			"settings":
+			{
+				"buffer_size": 149,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "mp.c",
+			"settings":
+			{
+				"buffer_size": 1282,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "syscall.h",
+			"settings":
+			{
+				"buffer_size": 1195,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 332.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control:",
+				"Package Control: Install Package"
+			],
+			[
+				"con",
+				"Set Syntax: R Console"
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"set",
+				"Set Syntax: C"
+			],
+			[
+				"dif",
+				"Set Syntax: Diff"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/romanjoe/kernelmoduletest/md3.c",
+		"/home/romanjoe/kernelmoduletest/md2.c",
+		"/home/romanjoe/kernelmoduletest/Makefile",
+		"/home/romanjoe/kernelmoduletest/md.h",
+		"/home/romanjoe/kernelmoduletest/syscallsexample/Makefile",
+		"/home/romanjoe/kernelmoduletest/md1.c",
+		"/home/romanjoe/x-tools/README.md",
+		"/home/romanjoe/dev/linux-workspace/strrev/main.cpp",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/mux4/mux4.v",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/mac/mult_acc.v",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/generic_memory/mem_generic.v",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/dff/dff.v",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/dff_gate/dff_gate.v",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/counter4/counter4.v",
+		"/media/romanjoe/RJ HDD/DevFolder/sshkeys/mykey.ppk",
+		"/media/romanjoe/RJ HDD/DevFolder/Verilog/adder/design/full_adder.v",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/media/romanjoe/RJ HDD/DevFolder/Python/google-python-exercises/basic/wordcount.py",
+		"/home/romanjoe/Desktop/mimic1.py",
+		"/home/romanjoe/Desktop/alice.txt",
+		"/home/romanjoe/Desktop/small.txt",
+		"/home/romanjoe/Desktop/mimic.py",
+		"/media/romanjoe/RJ HDD/DevFolder/Python/google-python-exercises/basic/solution/wordcount.py",
+		"/home/romanjoe/gnuplot-compass.plg",
+		"/media/romanjoe/UUI/strrev.cpp",
+		"/home/romanjoe/dev/altera/13.1/modelsim_ase/examples/verilog/vpi/simple_vpi/dff.v",
+		"/home/romanjoe/dev/altera/13.1/modelsim_ase/examples/verilog/vpi/simple_vpi/prim.v",
+		"/home/romanjoe/dev/altera/13.1/modelsim_ase/examples/verilog/vpi/simple_vpi/top.v",
+		"/home/romanjoe/dev/altera/13.1/logs/modelsim_ase-13.1.0.162-install.log",
+		"/home/romanjoe/dev/altera/13.1/modelsim_ase/examples/verilog/vpi/simple_vpi/vpi_test.c",
+		"/home/romanjoe/dev/rpi-workspace/RemoteSystemsTempFiles/92.249.108.2/home/pi/hmc5883.py",
+		"/media/romanjoe/RJ HDD/Archive/linux kernels/linux-3.13.3/drivers/i2c/i2c-dev.c",
+		"/home/romanjoe/dev/rpi-workspace/adlx345/main.cpp",
+		"/home/romanjoe/compass-plot.dat",
+		"/home/romanjoe/measurements.dat",
+		"/home/romanjoe/dev/altera/13.1/quartus/common/python/lib/site-packages/quartus/flow.py",
+		"/home/romanjoe/Matlab801/install",
+		"/home/romanjoe/Matlab801/serial/Readme.txt",
+		"/home/romanjoe/Downloads/octave-3.8.1/INSTALL",
+		"/home/romanjoe/dev/rpi-workspace/adlx345/scp.py",
+		"/home/romanjoe/dev/rpi-workspace/adlx345/scp.sh",
+		"/home/romanjoe/testfile.dat",
+		"/media/windata/Documents/Education/Губарь/modelsim labs/mult_acc.v",
+		"/media/windata/Documents/Education/Губарь/laba8/test_CPU.v",
+		"/media/windata/Documents/Education/Губарь/laba8/test_CPU1.v",
+		"/media/windata/Documents/Education/Губарь/laba8/CPU.v",
+		"/media/windata/Documents/Education/Губарь/laba7/test_ComplexALU.v",
+		"/media/windata/Documents/Education/Губарь/laba7/ComplexALU.v",
+		"/media/romanjoe/RJ HDD/Archive/linux kernels/linux-3.13.3/include/linux/i2c-dev.h",
+		"/home/romanjoe/dev/ct-build/.config.2",
+		"/media/romanjoe/RJ HDD/Archive/linux kernels/linux-3.13.3/drivers/input/misc/adxl34x.c",
+		"/media/romanjoe/RJ HDD/Archive/linux kernels/linux-3.13.3/drivers/input/misc/adxl34x.h",
+		"/home/romanjoe/Untitled Document",
+		"/home/romanjoe/.bashrc",
+		"/home/romanjoe/a.out",
+		"/etc/environment",
+		"/home/romanjoe/.profile",
+		"/etc/bash.bashrc",
+		"/etc/pam.d/login",
+		"/home/romanjoe/.bash_logout",
+		"/etc/pam.conf",
+		"/etc/security/pam_env.conf",
+		"/etc/profile.d/vte.sh",
+		"/home/romanjoe/dev/ct-build/bin/ct-ng",
+		"/home/romanjoe/dev/buildroot-2013.11/board/arm/foundation-v8/readme.txt",
+		"/home/romanjoe/.bash_history",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/dyndev.c",
+		"/home/romanjoe/kernelmoduletest/poll/poll.h",
+		"/home/romanjoe/dev/workspace/rpi-test/Debug/main.d",
+		"/home/romanjoe/.bashcs",
+		"/home/romanjoe/dev/eclipse/Untitled Document",
+		"/home/romanjoe/dev/ct-build/.config",
+		"/home/romanjoe/.cache/.fr-nQpKzE/dev/poll/user.h",
+		"/home/romanjoe/kernelmoduletest/poll/Makefile",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/fixdev.c",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/dev.h",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/Makefile",
+		"/home/romanjoe/dev/opencv-2.4.8/platforms/linux/arm-gnueabi.toolchain.cmake",
+		"/home/romanjoe/dev/opencv-2.4.8/platforms/scripts/cmake_arm_gnueabi_hardfp.sh",
+		"/home/romanjoe/hello/hello.c",
+		"/home/romanjoe/dev/opencv-2.4.8/CMakeLists.txt",
+		"/home/romanjoe/dev/opencv-2.4.8/samples/cpp/Qt_sample/main.cpp",
+		"/home/romanjoe/.cache/.fr-UXXRE2/build.log",
+		"/home/romanjoe/x-tools/hello.c",
+		"/home/romanjoe/src/raspberrypi/staging/config.in",
+		"/home/romanjoe/kernelmoduletest/moduleparamsexample/Makefile",
+		"/home/romanjoe/kernelmoduletest/moduleparamsexample/mod_params.c",
+		"/home/romanjoe/kernelmoduletest/.gitignore",
+		"/home/romanjoe/src/raspberrypi/staging/config.gen/cc.in.2",
+		"/home/romanjoe/src/raspberrypi/staging/config.gen/kernel.in",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/config.mk",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/configure.in",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/config.in",
+		"/home/romanjoe/dev/configbackup",
+		"/home/romanjoe/kernelmoduletest/README.md",
+		"/proc/kallsyms",
+		"/home/romanjoe/kernelmodule/md2.c",
+		"/home/romanjoe/kernelmodule/md1.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/Makefile",
+		"/home/romanjoe/kernelmodule/syscallsexample/mdc.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/mdu.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/mp.c",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Git.sublime-settings",
+		"/home/romanjoe/kernelmodule/.gitignore",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Git GUI Clients.sublime-settings",
+		"/home/romanjoe/kernelmodule/Makefile",
+		"/home/romanjoe/kernelmodule/md.h",
+		"/home/romanjoe/kernelmodule/md3.c",
+		"/home/romanjoe/dev/linux-3.13.3/arch/arm/kernel/calls.S",
+		"/home/romanjoe/kernelmodule/mp.c",
+		"/home/romanjoe/.cache/.fr-JXctTl/int80/mdc.c",
+		"/home/romanjoe/.cache/.fr-NqflZ0/int80/mdu.c",
+		"/home/romanjoe/.cache/.fr-AJhL5u/int80/Makefile",
+		"/home/romanjoe/.cache/.fr-g8xMqy/int80/mp.c",
+		"/home/romanjoe/dev/linux-3.13.3/arch/arm/kernel/signal.c",
+		"/home/romanjoe/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/media/romanjoe/RJ HDD/[DevFolder]/sshkeys/mykey.ppk",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings",
+		"/home/romanjoe/.config/sublime-text-3/Packages/C99/messages/install.txt",
+		"/home/romanjoe/.config/sublime-text-3/Packages/Makefile Improved/README.rst",
+		"/home/romanjoe/kernelmodule/moduletests.sublime-project",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/SideBarGit.sublime-settings",
+		"/media/romanjoe/RJ HDD/Dropbox/desktop.ini",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Package Control.sublime-settings",
+		"/home/romanjoe/kernelmodule/md1.ko",
+		"/home/romanjoe/.cache/.fr-t0V6HX/log_level/Makefile",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/drivers/atm/he.c"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"EEPROM_DELAY",
+			"udelay"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "mdc.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 245,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C99/C99.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "mdu.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 149,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C99/C99.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "mp.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1282,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C99/C99.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "syscall.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1195,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 224.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 114.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 256.0
+	},
+	"project": "syscalls.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"~/kernelmodule/moduletests.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 109.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

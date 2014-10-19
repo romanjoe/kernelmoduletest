@@ -1,0 +1,610 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"struc",
+				"structure"
+			],
+			[
+				"de",
+				"dev"
+			],
+			[
+				"print",
+				"printf	printf …"
+			],
+			[
+				"do_",
+				"do_mknod"
+			],
+			[
+				"get",
+				"do_getpid"
+			],
+			[
+				"__",
+				"__NR_mknod"
+			],
+			[
+				"mode",
+				"mode_t"
+			],
+			[
+				"pr",
+				"printf	printf …"
+			],
+			[
+				"writ",
+				"write_call"
+			],
+			[
+				"pri",
+				"printf	printf …"
+			],
+			[
+				"st",
+				"str"
+			],
+			[
+				"md1",
+				"md1_intvalue"
+			],
+			[
+				"md",
+				"md1_proc"
+			],
+			[
+				"TARGET",
+				"TARGET4"
+			],
+			[
+				"TAR",
+				"TARGET3"
+			],
+			[
+				"TA",
+				"TARGET2"
+			],
+			[
+				"prin",
+				"printk"
+			],
+			[
+				"s",
+				"static"
+			],
+			[
+				"inc",
+				"include"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "#include \"poll.h\"\n\nMODULE_LICENSE( \"GPL\" );\nMODULE_AUTHOR( \"Roman Joe <mrromanjoe@gmail.com>\" );\nMODULE_VERSION( \"5.2\" );\n\nstatic int pause = 100;\nmodule_param( pause, int, S_IRUGO );\n\nstatic struct private {				// device data block			\n	atomic_t roff;					// offset for read\n	char buf[ LEN_MSG + 2 ];		// data buffer\n} devblock = {						// static initialization of what \n	.roff = ATOMIC_INIT( 0 ),		// will dynamically happen in open()\n	.buf = \"not initiazed yet!\\n\",\n};\n\nstatic struct private *dev = &devblock; // pointer on structure devblock - device data block\n\nstatic DECLARE_WAIT_QUEUE_HEAD( qwait ); // declaring wait queue\n\n// read inside buffer (in devlock) until it ends\nstatic ssize_t read( struct file *file, char *buf,\n					 size_t count, loff_t *ppos )\n{\n	int len = 0;\n	int off = atomic_read( &dev->roff );\n\n	if( off > strlen( dev->buf ) )	// no available data\n	{\n		if( file->f_flags & O_NONBLOCK )\n			return -EAGAIN;			// no data available, try again later\n		else interruptible_sleep_on( &qwait );\n	}\n\n	off = atomic_read( &dev->roff );	// read update\n\n	if( off == strlen( dev->buf ) )\n	{\n		atomic_set( &dev->roff, off + 1 );\n		return 0;\n	}									// end of file EOF\n\n	len = strlen( dev->buf ) - off;		// is data present?\n	len = count < len ? count : len;\n\n	if ( copy_to_user( buf, dev->buf + off, len ) )\n		return -EFAULT;\n\n	atomic_set( &dev->roff, off + len );\n	return len;\n}\n\n// full update of buffer (and remove EOF)\nstatic ssize_t write( struct file *file, const char *buf,\n					size_t count, loff_t *ppos )\n{\n	int res, len = count < LEN_MSG ? count : LEN_MSG;\n	res = copy_from_user( dev->buf, ( void* )buf, len );\n	dev->buf[ len ] = '\\0';				// reestablish the end of string\n	\n	if( '\\n' != dev->buf[ len - 1 ] ) \n		strcat( dev->buf, \"\\n\" );\n\n	atomic_set( &dev->roff, 0 );		// enable next reading\n	wake_up_interruptible( &qwait );\n\n	return len;\n}\n\n// multiplexing poll/select (with dummy delay)\nunsigned int poll( struct file *file, struct poll_table_struct *poll )\n{\n	int flag = POLLOUT | POLLWRNORM;\n	poll_wait( file, &qwait, poll );\n	sleep_on_timeout( &qwait, pause );\n\n	if( atomic_read( &dev->roff ) <= strlen( dev->buf ) )\n		flag |= ( POLLIN | POLLRDNORM );\n\n	return flag;\n}\n\n// table of enabled operations for device\nstatic const struct file_operations fops = \n{\n	.owner = THIS_MODULE,\n	.read = read,\n	.write = write,\n	.poll = poll,	\n};\n\n// structure for device registration using misc_register() interface\nstatic struct miscdevice pool_dev = \n{\n	MISC_DYNAMIC_MINOR, DEVNAME, &fops\n};\n\nstatic int __init init( void )\n{\n	int ret = misc_register( &pool_dev ); \n\n	if( ret ) printk( KERN_ERR \"unable to register device\\n\" ); \n\n	return ret; \n}\n\nmodule_init( init ); \n\nstatic void __exit exit( void )\n{\n	misc_deregister( &pool_dev ); \n}\n\nmodule_exit( exit );",
+			"file": "poll/poll.c",
+			"file_size": 2675,
+			"file_write_time": 130409443364952013,
+			"settings":
+			{
+				"buffer_size": 2778,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "poll/pcat.c",
+			"settings":
+			{
+				"buffer_size": 1325,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"poll.h\"\n\nint main( int argc, char *argv[] )\n{\n	struct parm p = parms( argc, argv, 1 );\n	const char *sout = argv[ optind ];\n	\n	if( p.vis > 0 ) \n		fprintf( stdout, \"nonblocked: %s, multiplexed: %s, string for output: %s\\n\",\n		 ( 0 == p.blk ? \"yes\" : \"no\" ),\n		 ( 0 == p.mlt ? \"yes\" : \"no\" ),\n		 argv[ optind ] );\n	\n	int dfd = opendev();                       // дескриптор устройства\n	\n	if( 0 == p.blk ) nonblock( dfd );\n	\n	struct pollfd client[ 1 ] = {\n		{\n			.fd = dfd,\n			.events = POLLOUT | POLLWRNORM,\n		}\n	};\n\n	struct timeval t1, t2;\n	gettimeofday( &t1, NULL );\n	int res;\n	\n	if( 0 == p.mlt )\n		res = poll( client, 1, -1 );\n	\n	res = write( dfd, sout, strlen( sout ) ); // запись\n	gettimeofday( &t2, NULL );\n	fprintf( stdout, \"interval %s write %d bytes: \", interval( t1, t2 ), res );\n	\n	if( res < 0 )\n		ERR( \"write error: %m\\n\" );\n	else if( 0 == res )\n	{\n		if( errno == EAGAIN )\n			fprintf( stdout, \"device NOT READY!\\n\" );\n	} else fprintf( stdout, \"%s\\n\", sout );\n	\n	close( dfd );\n	\n	return EXIT_SUCCESS;\n};",
+			"file": "poll/pecho.c",
+			"file_size": 1045,
+			"file_write_time": 130409443364952013,
+			"settings":
+			{
+				"buffer_size": 1021,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "poll/user.h",
+			"settings":
+			{
+				"buffer_size": 1410,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "poll/poll.h",
+			"settings":
+			{
+				"buffer_size": 425,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "CURRENT = $(shell uname -r)\nKDIR = /lib/modules/$(CURRENT)/build\nPWD = $(shell pwd)\nDEST = /lib/modules/$(CURRENT)/misc\nTARGET = poll\n\nobj-m := $(TARGET).o\n\nall:  prog module\n\nmodule:\n	$(MAKE) -C $(KDIR) M=$(PWD) modules\n\nprog: pcat pecho\n\npcat:   poll.h user.h pcat.c\n	gcc pcat.c -o pcat\n\npecho:  poll.h user.h pecho.c\n	gcc pecho.c -o pecho\n\nclean:\n	@rm -f *.o  .*.cmd .*.flags *.mod.c *.order\n	@rm -f .*.*.cmd *.symvers *~ *.*~ TODO.*\n	@rm -fR .tmp*\n	@rm -rf .tmp_versions\n\ndisclean: clean\n	@rm -f *.ko pcat pecho\n",
+			"file": "poll/Makefile",
+			"file_size": 516,
+			"file_write_time": 130408548162763482,
+			"settings":
+			{
+				"buffer_size": 516,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Makefile Improved/Make.sublime-build",
+	"command_palette":
+	{
+		"height": 332.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control:",
+				"Package Control: Install Package"
+			],
+			[
+				"con",
+				"Set Syntax: R Console"
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"set",
+				"Set Syntax: C"
+			],
+			[
+				"dif",
+				"Set Syntax: Diff"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/romanjoe/.bashrc",
+		"/home/romanjoe/.bash_history",
+		"/etc/environment",
+		"/home/romanjoe/.profile",
+		"/home/romanjoe/.bash_logout",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/dyndev.c",
+		"/home/romanjoe/kernelmoduletest/poll/poll.h",
+		"/home/romanjoe/dev/workspace/rpi-test/Debug/main.d",
+		"/home/romanjoe/.bashcs",
+		"/home/romanjoe/dev/eclipse/Untitled Document",
+		"/home/romanjoe/dev/ct-build/.config",
+		"/home/romanjoe/dev/ct-build/bin/ct-ng",
+		"/home/romanjoe/.cache/.fr-nQpKzE/dev/poll/user.h",
+		"/home/romanjoe/kernelmoduletest/poll/Makefile",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/fixdev.c",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/dev.h",
+		"/home/romanjoe/kernelmoduletest/moduledriverexample/Makefile",
+		"/home/romanjoe/dev/opencv-2.4.8/platforms/linux/arm-gnueabi.toolchain.cmake",
+		"/home/romanjoe/dev/opencv-2.4.8/platforms/scripts/cmake_arm_gnueabi_hardfp.sh",
+		"/home/romanjoe/hello/hello.c",
+		"/home/romanjoe/dev/opencv-2.4.8/CMakeLists.txt",
+		"/home/romanjoe/dev/opencv-2.4.8/samples/cpp/Qt_sample/main.cpp",
+		"/home/romanjoe/.cache/.fr-UXXRE2/build.log",
+		"/home/romanjoe/x-tools/hello.c",
+		"/home/romanjoe/src/raspberrypi/staging/config.in",
+		"/home/romanjoe/kernelmoduletest/moduleparamsexample/Makefile",
+		"/home/romanjoe/kernelmoduletest/moduleparamsexample/mod_params.c",
+		"/home/romanjoe/kernelmoduletest/.gitignore",
+		"/home/romanjoe/src/raspberrypi/staging/config.gen/cc.in.2",
+		"/home/romanjoe/src/raspberrypi/staging/config.gen/kernel.in",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/config.mk",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/configure.in",
+		"/home/romanjoe/dev/crosstools/lib/ct-ng.1.19.0/config/config.in",
+		"/home/romanjoe/dev/configbackup",
+		"/home/romanjoe/kernelmoduletest/README.md",
+		"/proc/kallsyms",
+		"/home/romanjoe/kernelmodule/md2.c",
+		"/home/romanjoe/kernelmodule/md1.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/Makefile",
+		"/home/romanjoe/kernelmodule/syscallsexample/mdc.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/mdu.c",
+		"/home/romanjoe/kernelmodule/syscallsexample/mp.c",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Git.sublime-settings",
+		"/home/romanjoe/kernelmodule/.gitignore",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Git GUI Clients.sublime-settings",
+		"/home/romanjoe/kernelmodule/Makefile",
+		"/home/romanjoe/kernelmodule/md.h",
+		"/home/romanjoe/kernelmodule/md3.c",
+		"/home/romanjoe/dev/linux-3.13.3/arch/arm/kernel/calls.S",
+		"/home/romanjoe/kernelmodule/mp.c",
+		"/home/romanjoe/.cache/.fr-JXctTl/int80/mdc.c",
+		"/home/romanjoe/.cache/.fr-NqflZ0/int80/mdu.c",
+		"/home/romanjoe/.cache/.fr-AJhL5u/int80/Makefile",
+		"/home/romanjoe/.cache/.fr-g8xMqy/int80/mp.c",
+		"/home/romanjoe/dev/linux-3.13.3/arch/arm/kernel/signal.c",
+		"/home/romanjoe/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/media/romanjoe/RJ HDD/[DevFolder]/sshkeys/mykey.ppk",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings",
+		"/home/romanjoe/.config/sublime-text-3/Packages/C99/messages/install.txt",
+		"/home/romanjoe/.config/sublime-text-3/Packages/Makefile Improved/README.rst",
+		"/home/romanjoe/kernelmodule/moduletests.sublime-project",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/SideBarGit.sublime-settings",
+		"/media/romanjoe/RJ HDD/Dropbox/desktop.ini",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/home/romanjoe/.config/sublime-text-3/Packages/User/Package Control.sublime-settings",
+		"/home/romanjoe/kernelmodule/md1.ko",
+		"/home/romanjoe/.cache/.fr-t0V6HX/log_level/Makefile",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/drivers/atm/he.c",
+		"/media/romanjoe/boot/config.txt",
+		"/media/romanjoe/fc254b57-8fff-4f96-9609-ea202d871acf/opt/sonic-pi/README.md",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/arch/arm/boot/install.sh",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/drivers/atm/he.h",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/drivers/staging/iio/accel/lis3l02dq_core.c",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/sound/pci/ali5451/ali5451.c",
+		"/home/romanjoe/dev/linux-rpi-3.6.y/drivers/staging/ipack/bridges/tpci200.c",
+		"/home/romanjoe/dev/crosstool-ng-1.19.0/build.log",
+		"/media/romanjoe/RJ HDD/Archive/kernelmodules/export-data/Makefile",
+		"/home/romanjoe/dev/kernelmodule/md.h",
+		"/home/romanjoe/dev/kernelmodule/md3.c",
+		"/home/romanjoe/dev/kernelmodule/md2.c",
+		"/home/romanjoe/dev/kernelmodule/md1.c",
+		"/home/romanjoe/dev/kernelmodule/Makefile",
+		"/media/romanjoe/RJ HDD/Archive/kernelmodules/Makefile",
+		"/media/romanjoe/RJ HDD/Archive/kernelmodules/export-data/md.hist",
+		"/media/romanjoe/RJ HDD/Archive/kernelmodules/export-data/md3.c",
+		"/home/romanjoe/dev/kernelmodule/module.h",
+		"/media/romanjoe/RJ HDD/[DevFolder]/stm32/main (rtos pwm).c",
+		"/home/romanjoe/dev/build/tools/configs/bcm2708-ct-ng.config",
+		"/home/romanjoe/dev/build/tools/configs/bcm2708hardfp-ct-ng.config"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"EEPROM_DELAY",
+			"udelay"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "poll/poll.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2778,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								18,
+								18
+							]
+						],
+						"settings":
+						{
+							"rulers":
+							[
+								80
+							],
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "poll/pcat.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1325,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "poll/pecho.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1021,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								523,
+								523
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "poll/user.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								346,
+								346
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "poll/poll.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 425,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								22,
+								22
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "poll/Makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 516,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								156,
+								156
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile Improved/Makefile Improved.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.565527065527,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 224.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 114.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 256.0
+	},
+	"project": "modules.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"~/kernelmodule/moduletests.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 109.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
