@@ -35,11 +35,6 @@ static void receive_data(int fd)
 	{
 		printf("Blue button was pressed %d times\n", buf[1]);
 	}
-	// printf("read bytes = %d\n", retval);
-	// for(i = 0; i < 11; i++)
-	// {
-	// 	printf("%d\n", buf[i]);
-	// }
 }
 
 static void help(char *app_name)
